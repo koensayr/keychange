@@ -1,0 +1,18 @@
+# Core dependencies
+librosa>=0.10.1
+numpy>=1.24.0
+sounddevice>=0.4.6
+soundfile>=0.12.1
+python-vst3>=1.3.0
+pysrt>=1.2.0
+av>=10.0.0
+
+# Development dependencies
+pytest>=7.4.0
+pytest-mock>=3.11.1
+pytest-cov>=4.1.0
+black>=23.9.0
+isort>=5.12.0
+
+# Example dependencies
+rich>=13.5.2      # For terminal UI in examples

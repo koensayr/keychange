@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.isort]
+profile = "black"
+src_paths = ["src", "tests"]
+honor_noqa = true
+
+[tool.pytest.ini_options]
+addopts = "-v --tb=short"
+doctest_optionflags = "NORMALIZE_WHITESPACE ELLIPSIS"
+minversion = "7.4"
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'

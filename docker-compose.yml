@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  keychange:
+    build: .
+    devices:
+      - "/dev/snd:/dev/snd"  # Give access to host audio devices
+    environment:
+      - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
+    volumes:
+      - ${XDG_RUNTIME_DIR}/pulse:${XDG_RUNTIME_DIR}/pulse  # For PulseAudio
+      - ~/.config/pulse/cookie:/root/.config/pulse/cookie
+      - ./audio:/app/audio  # Mount directory for audio files
+    # Default command can be overridden via command line
+    command: keychange --help
+
+  # Service for real-time monitoring with UI
+  monitor:
+    build: .
+    devices:
+      - "/dev/snd:/dev/snd"
+    environment:
+      - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
+      - DISPLAY=${DISPLAY}  # For terminal UI
+    volumes:
+      - ${XDG_RUNTIME_DIR}/pulse:${XDG_RUNTIME_DIR}/pulse
+      - ~/.config/pulse/cookie:/root/.config/pulse/cookie
+      - /tmp/.X11-unix:/tmp/.X11-unix  # For terminal UI
+    command: realtime_key_monitor.py
+
+  # Service for SRT stream monitoring
+  srt-monitor:
+    build: .
+    ports:
+      - "9999:9999/udp"  # For SRT streaming
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    command: music_production_monitor.py --srt srt://0.0.0.0:9999
